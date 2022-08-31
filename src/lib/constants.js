@@ -1,0 +1,9 @@
+import creds from '../../config.json' assert { type: "json" }
+
+export const BASE_URL = 'https://discord.com/api/v10';
+export const GATEWAY_URL = `${BASE_URL}/gateway/bot`
+export const MESSAGE_URL = `${BASE_URL}/channels/`
+export const INTERACTION_URL = `${BASE_URL}/interactions/`
+
+export const ADD_BOT_URL = `${BASE_URL}/oauth2/authorize?client_id=${creds.client_id}&permissions=60480&scope=bot%20applications.commands`;
+export const ADD_COMMAND_URL = `${BASE_URL}/applications/${creds.client_id}/commands`;

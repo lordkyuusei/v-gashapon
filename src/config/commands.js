@@ -1,37 +1,18 @@
-import credentials from '../../config.json' assert { type: "json" }
-
-const endpoints = {
-    'base': 'https://discord.com/api/v10',
-};
-
-const routes = {
-    'add_command': `${endpoints.base}/applications/${credentials.client_id}/commands`,
-}
+import { ADD_COMMAND_URL } from '../lib/constants.js';
+import { post } from '../lib/fetch.js';
 
 export const addCommand = async (name, type, description) => {
-    const response = await fetch(routes.add_command, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bot ${credentials.bot_token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name,
-            type,
-            description,
-        }),
-    });
+    const response = await post(ADD_COMMAND_URL, JSON.stringify({
+        name,
+        type,
+        description,
+    }));
 
-    return await response.json();
+    return response;
 }
 
 export const getCommands = async () => {
-    const response = await fetch(routes.add_command, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bot ${credentials.bot_token}`,
-        },
-    });
+    const response = await get(ADD_COMMAND_URL);
 
-    return await response.json();
+    return response;
 }

@@ -1,49 +1,28 @@
 import WebSocket from 'ws';
+
+import { get, post } from '../lib/fetch.js';
+import { INTERACTION_URL, GATEWAY_URL } from '../lib/constants.js';
 import credentials from '../../config.json' assert { type: "json" }
 
-const endpoints = {
-    'base': 'https://discord.com/api/v10',
-};
-
-const routes = {
-    'gateway_bot': `${endpoints.base}/gateway/bot`,
-    'bot_url': `${endpoints.base}/oauth2/authorize?client_id=${credentials.client_id}&permissions=60480&scope=bot%20applications.commands`,
-    'message_url': `${endpoints.base}/channels/`,
-    'interaction_url': `${endpoints.base}/interactions/`,
-}
 
 const getGateway = async () => {
-    const response = await fetch(routes.gateway_bot, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bot ${credentials.bot_token}`,
-        },
-    });
-
-    return await response.json();
+    const response = await get(GATEWAY_URL);
+    console.log(response)
+    return response;
 }
 
-const handleInteractionCreate = (ws, data) => {
+const handleInteractionCreate = async (ws, data) => {
     const { type, token, id } = data;
-    console.log(type, token, id);
+    const url = `${INTERACTION_URL}/${id}/${token}/callback`;
 
-    const response = fetch(`${routes.interaction_url}/${id}/${token}/callback`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bot ${credentials.bot_token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            "type": 4,
-            "data": {
-                "content": "ouais tkt j'arrive",
-            }
-        }),
-    }).then(async response => {
-        const json = await response.json();
-        console.log(json);
-        console.log(json.errors._errors)
-    })
+    const response = await post(url, {
+        "type": parseInt(type),
+        "data": {
+            "content": "ouais tkt j'arrive",
+        }
+    });
+
+    return response;
 }
 
 const handleReady = (ws, data) => {
@@ -56,18 +35,18 @@ const handleMessageCreate = (ws, data) => {
     console.log(content, author);
 }
 
-const handleEvent = (ws, t, d) => {
+const handleEvent = async (ws, t, d) => {
     console.log('[event]', t);
 
     const mapEventToMethods = [
         { event: t === 'READY', method: () => handleReady(ws, d) },
         { event: t === 'MESSAGE_CREATE', method: () => handleMessageCreate(ws, d) },
-        { event: t === 'INTERACTION_CREATE', method: () => handleInteractionCreate(ws, d) },
+        { event: t === 'INTERACTION_CREATE', method: async () => await handleInteractionCreate(ws, d) },
         { event: true, method: () => console.log('[unknown]', t) },
     ]
 
     const handle = mapEventToMethods.find(event => event.event === true).method;
-    handle();
+    await handle();
 }
 
 const handleHello = (ws, data, s) => {
@@ -120,14 +99,14 @@ const connectToGateway = async (url) => {
         console.log(response);
     });
 
-    ws.on('message', (message) => {
+    ws.on('message', async (message) => {
         const response = message.toString();
         const json = JSON.parse(response);
         const { op, t, d, s } = json;
 
         console.log(op);
         const mapOpToMethods = [
-            { op: op === 0, method: () => handleEvent(ws, t, d) },
+            { op: op === 0, method: async () => await handleEvent(ws, t, d) },
             { op: op === 1, method: () => handleHeartbeatRequest(ws, d, s) },
             { op: op === 10, method: () => handleHello(ws, d, s) },
             { op: op === 11, method: () => handleHeartbeat(d) },
@@ -135,7 +114,7 @@ const connectToGateway = async (url) => {
         ]
 
         const handle = mapOpToMethods.find(op => op.op === true).method;
-        handle();
+        await handle();
     })
 
     ws.on('close', () => {
