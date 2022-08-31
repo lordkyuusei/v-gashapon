@@ -1,0 +1,29 @@
+{
+  "name": "v-gashapon",
+  "version": "0.0.1",
+  "description": "gashapon discord bot for vtubers",
+  "main": "./src/index.js",
+  "scripts": {
+    "dev": "node ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lordkyuusei/v-gashapon.git"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "gashapon"
+  ],
+  "author": "Kyuu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lordkyuusei/v-gashapon/issues"
+  },
+  "homepage": "https://github.com/lordkyuusei/v-gashapon#readme",
+  "type": "module",
+  "dependencies": {
+    "ws": "^8.8.1"
+  }
+}
