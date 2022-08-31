@@ -29,14 +29,20 @@ const handleInteractionCreate = (ws, data) => {
 
     const response = fetch(`${routes.interaction_url}/${id}/${token}/callback`, {
         method: 'POST',
-        body: {
-            "type": 2,
+        headers: {
+            'Authorization': `Bot ${credentials.bot_token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            "type": 4,
             "data": {
                 "content": "ouais tkt j'arrive",
             }
-        },
+        }),
     }).then(async response => {
-        console.log(await response.json());
+        const json = await response.json();
+        console.log(json);
+        console.log(json.errors._errors)
     })
 }
 

@@ -1,9 +1,10 @@
 import discord from './config/gateway.js';
-import addCommand from './config/commands.js';
+import { addCommand, getCommands } from './config/commands.js';
 
 const { getGateway, connectToGateway } = discord;
 
 const response = await getGateway();
 connectToGateway(response.url);
 
-addCommand('gasha', 1, 'gasha');
+const commands = await getCommands();
+console.log(commands);

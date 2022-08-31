@@ -8,7 +8,7 @@ const routes = {
     'add_command': `${endpoints.base}/applications/${credentials.client_id}/commands`,
 }
 
-const addCommand = async (name, type, description) => {
+export const addCommand = async (name, type, description) => {
     const response = await fetch(routes.add_command, {
         method: 'POST',
         headers: {
@@ -25,4 +25,13 @@ const addCommand = async (name, type, description) => {
     return await response.json();
 }
 
-export default addCommand;
+export const getCommands = async () => {
+    const response = await fetch(routes.add_command, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bot ${credentials.bot_token}`,
+        },
+    });
+
+    return await response.json();
+}
