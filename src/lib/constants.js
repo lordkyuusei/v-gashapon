@@ -10,3 +10,5 @@ export const ADD_BOT_URL = `${BASE_URL}/oauth2/authorize?client_id=${creds.clien
 export const ADD_COMMAND_URL = `${BASE_URL}/applications/${creds.client_id}/commands`;
 
 export const DATABASE_URL = './src/services/db/v-gashapon';
+
+export const HOUR_IN_MS = 3600000;
