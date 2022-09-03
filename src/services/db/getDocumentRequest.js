@@ -1,13 +1,17 @@
-import { getDocument, addOrSetDocument, logDatabase } from "./database.js";
+import { getDocument, addOrSetDocument } from "./database.js";
+
+const generateNewDocument = (id) => ({
+    id,
+    points: 0,
+    cards: [],
+    lastDrawTimestamp: 0,
+});
 
 const getDocumentRequest = async (id) => {
     const document = await getDocument(id);
 
-    console.log('[getDocumentRequest] document', document);
-
     if (document === undefined) {
-        const newDocument = { id, cards: [] };
-        console.log('[addDocumentRequest] document', newDocument);
+        const newDocument = generateNewDocument(id);
         await addOrSetDocument(id, newDocument);
         return newDocument;
     }

@@ -19,7 +19,6 @@ export const getDocument = async (id) => {
 }
 
 export const addOrSetDocument = async (id, document) => {
-    console.log("l25", document);
     await db.put(id, document);
 }
 
