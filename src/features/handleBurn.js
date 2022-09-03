@@ -7,11 +7,13 @@ const handleBurn = async (url, member, { name, options }) => {
     const { options: params } = options[0];
 
     const document = await getDocumentRequest(member.user.id);
-    document.cards = document.cards.filter(card => card.id !== params[0].value);
-    await setDocumentRequest(member.user.id, document);
-
-    // random number between 1 and 20
     const random = Math.floor(Math.random() * 20) + 1;
+
+    await setDocumentRequest(member.user.id, {
+        ...document,
+        cards: document.cards.filter(card => card.id !== params[0].value),
+        points: document.points + random
+    });
 
     const response = await post(url, {
         "type": 4,
