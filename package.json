@@ -24,6 +24,7 @@
   "homepage": "https://github.com/lordkyuusei/v-gashapon#readme",
   "type": "module",
   "dependencies": {
+    "level": "^8.0.0",
     "ws": "^8.8.1"
   }
 }

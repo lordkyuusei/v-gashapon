@@ -1,5 +1,5 @@
-import { get } from '../../lib/fetch.js';
-import { ADD_COMMAND_URL } from '../../lib/constants.js';
+import { get } from '../lib/fetch.js';
+import { ADD_COMMAND_URL } from '../lib/constants.js';
 
 export const showCommandView = async (route, res) => {
     const commands = await get(ADD_COMMAND_URL);
