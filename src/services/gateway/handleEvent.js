@@ -2,6 +2,7 @@ import { handleDraw, handleDrawChoice } from '../../features/handleDraw.js';
 import handleBurn from '../../features/handleBurn.js';
 import handleShow from '../../features/handleShow.js';
 
+import { log } from '../../lib/log.js'
 import gatewayStore from '../../lib/store.js';
 
 import { INTERACTION_URL, WEBHOOK_URL } from '../../lib/constants.js';
@@ -9,6 +10,8 @@ import { INTERACTION_URL, WEBHOOK_URL } from '../../lib/constants.js';
 const handleInteractionCreate = async (_, interaction) => {
     const { type, token, id, member, data } = interaction;
     const url = `${INTERACTION_URL}/${id}/${token}/callback`;
+
+    log('yellow', "[event] INTERACTION_CREATE", member.user.username, type, data.options);
 
     if (data.options) {
         gatewayStore.initial_interaction_token = token;
@@ -35,10 +38,13 @@ const handleReady = (data) => {
 
     gatewayStore.session_id = session_id;
     gatewayStore.resume_gateway_url = resume_gateway_url;
+
+    log('yellow', "[event] READY", resume_gateway_url);
 }
 
 const handleMessageCreate = (data) => {
     const { content, author } = data;
+    log('yellow', "[event] MESSAGE_CREATE", author.username, ' - ', content.length ? content : '[REDACTED]');
 }
 
 export const handleEvent = async (ws, t, d) => {
@@ -46,7 +52,7 @@ export const handleEvent = async (ws, t, d) => {
         { event: t === 'READY', method: () => handleReady(d) },
         { event: t === 'MESSAGE_CREATE', method: () => handleMessageCreate(d) },
         { event: t === 'INTERACTION_CREATE', method: async () => await handleInteractionCreate(ws, d) },
-        { event: true, method: () => console.log('\x1b[31m%s\x1b[0m', '[not_handled]', t) },
+        { event: true, method: () => log('red', "[event]", t, "not handled.") },
     ]
 
     const handle = mapEventToMethods.find(event => event.event === true).method;

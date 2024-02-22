@@ -1,4 +1,7 @@
+import { log } from '../../lib/log.js'
+
 export const handleReconnect = (ws, token, { session_id, resume_gateway_url, seq }) => {
+    log('yellow', "[event] RECONNECT", resume_gateway_url);
     const body = {
         op: 6,
         d: {

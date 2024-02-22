@@ -1,10 +1,12 @@
+import { log } from '../../lib/log.js'
+
 export const handleHeartbeatRequest = (ws, s) => {
-    console.log('\x1b[32m%s\x1b[0m', '[heartbeatRequest] successfully received from Gateway');
+    log('green', "[event] HEARTBEAT_REQUEST successfully received",);
 
     const body = { op: 1, d: s };
     ws.send(JSON.stringify(body));
 }
 
 export const handleHeartbeat = () => {
-    console.log('\x1b[32m%s\x1b[0m', '[heartbeat] successfully received from Gateway');
+    log('green', "[event] HEARTBEAT successfully received",);
 }

@@ -1,7 +1,10 @@
+import { log } from '../../lib/log.js'
+
 export const handleHello = (ws, data, s, token) => {
     const { heartbeat_interval } = data;
     const body = { op: 1, d: s };
 
+    log('yellow', "[event] HELLO successfully received");
     setInterval(() => ws.send(JSON.stringify(body)), heartbeat_interval);
 
     const identifyBody = {

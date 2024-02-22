@@ -1,4 +1,12 @@
-export const home = (path, res) => {
+import { ADD_BOT_URL } from "../lib/constants.js";
+
+export const home = async (path, res) => {
+    const commands = [
+        { link: '/add-command', name: 'Add Command' },
+        { link: '/del-command', name: 'Delete Command' },
+        { link: '/show-command', name: 'Show Command' },
+        { link: '/vtubers', name: 'VTubers' },
+    ];
     const markup = `
         <!DOCTYPE html>
         <html lang="en">
@@ -12,20 +20,22 @@ export const home = (path, res) => {
                     justify-content: center;
                     height: 100vh;
                     gap: 1em;
-                }
-                button {
+                };
+
+                a {
                     font-size: 1em;
                     padding: 0.5 1em;
                     border: 1px solid #ccc;
                     borderadius: 1em;
-                }
+                };
             </style>
         </head>
         <body>
             <div>
-                <a href="/add-command"><button id="add-command">Add Command</button></a>
-                <a href="/show-command"><button id="show-command">Show Command</button></a>
-                <a href="/del-command"><button id="del-command">Delete Command</button></a>
+                <h1>Commands</h1>
+                <ul>
+                    ${commands.map(command => `<li><a href="${command.link}">${command.name}</a></li>`).join('')}
+                </ul>
             </div>
         </body>
         </html>

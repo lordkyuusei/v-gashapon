@@ -1,5 +1,25 @@
 import creds from '../../config.json' assert { type: "json" }
 
+export const _postForm = async (url, body = null) => {
+    const options = {
+        method: "POST",
+        body,
+        headers: {
+            'Authorization': `Bot ${creds.bot_token}`,
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        if (response.status === 204) return;
+        console.log(response)
+        return await response.json();
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
 const _fetch = async (url, method, body = null) => {
     const options = {
         method,

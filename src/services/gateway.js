@@ -1,8 +1,10 @@
 import WebSocket from 'ws';
 
-import { get, post } from '../lib/fetch.js';
+import { get } from '../lib/fetch.js';
 import { GATEWAY_URL } from '../lib/constants.js';
 import creds from '../../config.json' assert { type: "json" }
+
+import { log } from '../lib/log.js'
 
 import { handleEvent } from './gateway/handleEvent.js';
 import { handleHello } from './gateway/handleHello.js';
@@ -29,10 +31,12 @@ const handleMessage = (message, ws) => {
     return handle();
 }
 
-const handleOpen = (url) => console.log('\x1b[31m%s\x1b[0m', `[open] connected to ${url}`);
+const handleOpen = (url) => {
+    log('green', `[open] connected to ${url}`);
+};
 
 const handleClose = (url, ws) => {
-    console.log('\x1b[31m%s\x1b[0m', `[close] disconnected from ${url}`);
+    log('red', `[close] disconnected from ${url}`);
     ws.close();
 }
 
