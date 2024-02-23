@@ -29,7 +29,7 @@ const server = http.createServer(async (req, res) => {
     return await handle(req, res);
 });
 
-server.listen(3000, () => {
+server.listen(3001, () => {
     openDatabase();
     log('green', 'Server is running on https://localhost:3000');
 });

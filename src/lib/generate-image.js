@@ -10,13 +10,13 @@ const screenshot = async (browser, url) => {
     return image;
 }
 
-export const generateImage = async (cards, variant) => {
+export const generateImage = async (card, variant) => {
     const browser = await puppeteer.launch({
         headless: true, defaultViewport: {
             height: 775,
             width: 460
         }
     });
-    const images = await Promise.all(cards.map(async (card, index) => await screenshot(browser, `http://localhost:3000/generate/${card.id}/${variant.id}`)));
-    return images;
+
+    return await screenshot(browser, `http://localhost:3001/generate/${card.id}/${variant.id}`);
 }
